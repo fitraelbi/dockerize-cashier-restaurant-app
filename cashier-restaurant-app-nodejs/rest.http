@@ -1,0 +1,33 @@
+GET http://localhost:3001
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1OTk4ODMzMDIsImV4cCI6MTU5OTg4MzM2MiwiYXVkIjoidW5kZWZpbmVkIiwiaXNzIjoiZ29vZ2xlLmNvbSJ9.rjAe1p47Q9ea6_ZL4Xdnb30Fjro3Z9gwxleWVVT55bs
+
+###login Route
+POST http://localhost:3001/auth/login
+Content-Type: application/json
+
+{
+    "email": "jhondoe@gmail.com",
+    "password" : "1234abcd"
+}
+
+###
+POST http://localhost:3001/user/register
+Content-Type: application/json
+
+{
+    "username": "john",
+    "email": "jhondoe@gmail.com",
+    "password" : "1234abcd"
+}
+
+
+###
+POST http://localhost:3001/auth/refresh-token
+Content-Type: application/json
+
+{
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MDE1MzMyMDksImV4cCI6MTYzMzA5MDgwOSwiYXVkIjoiam9obiIsImlzcyI6Imdvb2dsZS5jb20ifQ.hM4zRymmB8gdh6xX0u5cex5JO-utAsIEGBXeFSiYtcA"
+}
+
+###
+DELETE http://localhost:3001/auth/logout

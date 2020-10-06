@@ -1,0 +1,75 @@
+version: '3.7'
+services:
+
+nginx:
+    container_name: nginx
+    build:
+        context: .
+        dockerfile: ./nginx/dockerfile
+    image: nginx
+    restart: always
+    volumes:
+        - ./server/static/admin:/usr/share/nginx/html/static/admin
+    ports:
+        - 80:80
+    depends_on:
+        - nodejs
+    networks: 
+        - samplenet
+    command: nginx -g 'daemon off';
+    
+redis:
+    image: "redis:alpine"
+    
+    command: redis-server --requirepass sOmE_sEcUrE_pAsS
+    
+    ports:
+      - "6379:6379"
+    
+    volumes:
+      - ./redis-data:/var/lib/redis
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+    
+    environment:
+      - REDIS_REPLICATION_MODE=master
+    
+    networks: 
+      - samplenet
+db:
+  image: "postgres:12.4"
+  expose:
+    - 5433
+  ports:
+    - "5433:5432"
+  volumes:
+    - ./pgdata:/var/lib/postgresql/data
+  networks: 
+    - samplenet
+  environment:
+    POSTGRES_USER: mydb
+    POSTGRES_PASSWORD: 12341234
+    POSTGRES_DB: cashier-restaurant 
+
+nodejs:
+    container_name: "node_backend"
+    image: "backend"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+      - redis
+   
+    networks: 
+      - samplenet
+    environment:
+        ACCESS_TOKEN_SECRET: 0d1afdb986e6ea2dba64dec53697bd0757380f47442e2f85d0139e58eb035567
+        REFRESH_TOKEN_SECRET: 7afb273497b3750a8a1e27c54101092b7dca88cc112b20326e59258b99abbdc0
+        DB_PASSWORD: 12341234
+        DB_USER: lol
+        DB_HOST: localhost
+        DB_NAME: cashier-restaurant
+        PORT_REDIS: 6379
+        PORT: 3000
+
+networks: 
+    samplenet:
